@@ -1,0 +1,188 @@
+"""Black Jack"""
+# How To Play #
+#make suits
+#make card numbers
+#make deck
+#deal two cards
+#check if blackjack
+#ask if hit or stay
+#if stay dealer goes
+#if hit add card 
+    #check if bust
+    #ask if hit or stay again
+#dealer plays
+    #if dealer has 17 stay
+    #dealer hits
+        #check if bust
+#if no busts
+    #check who has highest number
+#################################
+# Use random cards
+import random
+import time
+# Face Cards #
+A = 1 or 11
+J = 10
+Q = 10
+K = 10
+# Decks
+spades = [A, 2, 3, 4, 5, 6, 7, 8, 9, 10, J, Q, K] 
+clubs = [A, 2, 3, 4, 5, 6, 7, 8, 9, 10, J, Q, K] 
+diamonds = [A, 2, 3, 4, 5, 6, 7, 8, 9, 10, J, Q, K] 
+hearts = [A, 2, 3, 4, 5, 6, 7, 8, 9, 10, J, Q, K] 
+deck = [spades, clubs, diamonds, hearts]
+used_deck=[]
+# Dealt cards
+player_hand = 0
+dealer_hand = 0
+########### Random card function #################
+def random_card(deck):
+    """picks a random card from the deck"""
+    # pick a random suit in the deck
+    suit = random.choice(deck)
+    # pick a random card in the suit
+    cards = random.choice(suit)
+    # remove card from remaining deck
+    suit.remove(cards)
+    # put card in the used deck so its not used again
+    used_deck.append(cards)
+    return int(cards)
+
+
+########### Check if bust function #############
+def busted(hand):
+    """check if the hand is over 21"""
+    #if hand is more than 21
+    if hand > 21:
+        #say busted
+        print("Bust!")
+        #end of turn
+        return False
+    #if hand is under than move on
+    if hand <= 21:
+        pass
+
+
+######### Check for blackjack function ##########
+def check_21(hand):
+    #check if hand is a blackjack
+    if hand == 21:
+        #say you win and deal again
+        print("BlackJack!")
+        return False
+    #if hand isnt 21 then move on
+    else:
+        return hand
+
+
+############ Hit or Stay function ##############
+def hit_stay(hand, deck):
+    #ask hit or stay
+    ask = input("Will you hit or stay?: ")
+    ask = ask.lower()
+    while ask!="hit" and ask!="stay" and ask!="h" and ask!="s":
+        print("That's not a choice, try again...")
+        ask = input("Will you hit or stay?: ")
+        print(" ")
+    #if hit
+    if ask == "hit" or ask == "h":
+        while ask == "hit" or ask == "h": 
+            #add random card
+            hit_card = random_card(deck)
+            print("hit card: ", hit_card)
+            print(hand)
+            hand = hand + hit_card
+            print("Your hand is now: ", hand)
+            #check if bust
+            if busted(hand) == False:
+                return False
+            if busted(hand) == True:
+                return hand
+            #ask if hit or stay
+            ask = input("Will you hit or stay?: ")
+            ask = ask.lower()
+    #if stay move on
+    if ask == "stay" or ask == "s":
+        pass
+    return hand
+
+
+########## Deal to player function ###############
+def deal_player(hand, deck):
+    #deal 2 cards to player
+    first_card = random_card(deck)
+    hand = hand + first_card
+    print("First card: ", first_card)
+    second_card = random_card(deck)
+    hand = hand + second_card
+    print("Second card: ", second_card)
+    print("Your hand: ", hand)
+    return hand
+
+
+########## Deal to dealer function ##############
+def deal_dealer(hand, deck):
+    #deal 2 cards to dealer
+    hand = hand + random_card(deck)
+    hand = hand + random_card(deck)
+    print(hand, "dealer")
+    return hand
+
+
+########## Dealers play function ################
+def dealer_play(hand, deck):
+    #if dealer has 17 stay
+    print("Dealers turn")
+    print("Dealers hand: ", hand)
+    while hand < 17:
+        print("Dealer hits...")
+        time.sleep(2)
+        hit_card = random_card(deck)
+        print("Hit card: ", hit_card)
+        hand = hand + hit_card
+        print("Dealers and is now: ", hand) 
+        #check if bust
+        busted(hand)
+    print("Dealer stays")
+    print("Dealers hand is now: ", hand)   
+    return hand
+
+##################################################
+def blackjack_game():
+    A = 1 or 11
+    J = 10
+    Q = 10
+    K = 10
+    # Decks
+    spades = [A, 2, 3, 4, 5, 6, 7, 8, 9, 10, J, Q, K] 
+    clubs = [A, 2, 3, 4, 5, 6, 7, 8, 9, 10, J, Q, K] 
+    diamonds = [A, 2, 3, 4, 5, 6, 7, 8, 9, 10, J, Q, K] 
+    hearts = [A, 2, 3, 4, 5, 6, 7, 8, 9, 10, J, Q, K] 
+    deck = [spades, clubs, diamonds, hearts]
+    used_deck=[]
+    while True:
+        # Dealt hands
+        player_hand = 0
+        dealer_hand = 0
+        #deal two cards
+        player_hand = deal_player(player_hand, deck)
+        check_21(player_hand)
+        print(player_hand, "player ")
+        dealer_hand = deal_dealer(dealer_hand, deck)
+        check_21(dealer_hand)
+        #ask if hit or stay
+        player_hand = hit_stay(player_hand, deck)
+        #dealer plays
+        dealer_hand = dealer_play(dealer_hand, deck)
+        #check who has highest number
+        print("Your hand: ", player_hand)
+        print("Dealer hand: ", dealer_hand)
+        if player_hand > dealer_hand:
+            print("You Win!")
+        if dealer_hand > player_hand:
+            print("You Lose!")
+        if player_hand == dealer_hand:
+            print("Tie")
+        print("Next hand!")
+        print(" ")
+blackjack_game()
